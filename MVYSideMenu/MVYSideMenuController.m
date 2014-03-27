@@ -284,9 +284,10 @@ typedef struct {
 			MVYSideMenuPanResultInfo panInfo = [self panResultInfoForVelocity:velocity];
 			
 			if (panInfo.menuAction == MVYSideMenuOpen) {
-				[self openMenuWithVelocity:panInfo.velocity];
-			} else {
 				[self closeMenuWithVelocity:panInfo.velocity];
+			} else {
+                				[self openMenuWithVelocity:panInfo.velocity];
+
 			}
 			break;
 		}
@@ -327,7 +328,7 @@ typedef struct {
 }
 
 - (CGFloat)closedOriginX {
-	return  self.menuFrame.size.width+220;
+	return  self.menuFrame.size.width+100;
 }
 
 - (CGRect)applyTranslation:(CGPoint)translation toFrame:(CGRect)frame {
@@ -335,8 +336,8 @@ typedef struct {
 	CGFloat newOrigin = frame.origin.x;
     newOrigin += translation.x;
 	
-    CGFloat minOrigin = [self closedOriginX];
-    CGFloat maxOrigin = 0.0f;
+    CGFloat minOrigin = 320-self.menuContainerView.frame.size.width;
+    CGFloat maxOrigin = [self closedOriginX];
     CGRect newFrame = frame;
     
     if (newOrigin < minOrigin) {
@@ -393,7 +394,6 @@ typedef struct {
 		[self.contentContainerView setTransform:CGAffineTransformMakeScale(self.options.contentViewScale, self.options.contentViewScale)];
 	} completion:^(BOOL finished) {
 		[self disableContentInteraction];
-        NSLog(@"%hhd",[self isMenuOpen]);
 	}];
     
     
@@ -451,7 +451,7 @@ typedef struct {
     CGRect tempRect;
 	CGFloat bezelWidth = self.options.bezelWidth;
 	
-    CGRectDivide(self.view.bounds, &leftBezelRect, &tempRect, bezelWidth, CGRectMinXEdge);
+    CGRectDivide(self.view.bounds, &leftBezelRect, &tempRect, bezelWidth, CGRectMaxXEdge);
     
     return CGRectContainsPoint(leftBezelRect, point);
 }
