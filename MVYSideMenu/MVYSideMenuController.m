@@ -296,6 +296,7 @@ typedef struct {
 	}
 }
 
+//harsh
 - (MVYSideMenuPanResultInfo)panResultInfoForVelocity:(CGPoint)velocity {
 	
 	static CGFloat thresholdVelocity = 450.0f;
@@ -318,15 +319,15 @@ typedef struct {
 }
 
 - (BOOL)isMenuOpen {
-	return self.menuContainerView.frame.origin.x == 0.0f;
+	return self.menuContainerView.frame.origin.x == 320-self.menuContainerView.frame.size.width;
 }
 
 - (BOOL)isMenuHidden {
-	return self.menuContainerView.frame.origin.x <= [self closedOriginX];
+	return self.menuContainerView.frame.origin.x >= [self closedOriginX];
 }
 
 - (CGFloat)closedOriginX {
-	return - self.menuFrame.size.width;
+	return  self.menuFrame.size.width+220;
 }
 
 - (CGRect)applyTranslation:(CGPoint)translation toFrame:(CGRect)frame {
@@ -370,9 +371,8 @@ typedef struct {
 }
 
 - (void)openMenuWithVelocity:(CGFloat)velocity {
-	
 	CGFloat menuXOrigin = self.menuContainerView.frame.origin.x;
-	CGFloat finalXOrigin = 0.0f;
+	CGFloat finalXOrigin = 320-self.menuContainerView.frame.size.width;
 	
 	CGRect frame = self.menuContainerView.frame;
 	frame.origin.x = finalXOrigin;
@@ -393,7 +393,10 @@ typedef struct {
 		[self.contentContainerView setTransform:CGAffineTransformMakeScale(self.options.contentViewScale, self.options.contentViewScale)];
 	} completion:^(BOOL finished) {
 		[self disableContentInteraction];
+        NSLog(@"%hhd",[self isMenuOpen]);
 	}];
+    
+    
 }
 
 - (void)closeMenuWithVelocity:(CGFloat)velocity {
@@ -524,7 +527,7 @@ typedef struct {
 - (void)addLeftMenuButtonWithImage:(UIImage *)buttonImage {
 	
 	UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:buttonImage style:UIBarButtonItemStyleBordered target:self action:@selector(toggleMenu)];
-	self.navigationItem.leftBarButtonItem = menuButton;
+	self.navigationItem.rightBarButtonItem = menuButton;
 }
 
 - (void)toggleMenu {
